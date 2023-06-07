@@ -1,10 +1,13 @@
 package com.myapp.pages;
+
 import com.myapp.utilities.Driver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
 public class OrangeHRMLoginPage {
+
     //    ALL PAGE CLASSES MUST HAVE A CONSTRUCTOR TO USE PAGE FACTORY
     public OrangeHRMLoginPage(){
 //        Page Factory is used to initiate the page objects

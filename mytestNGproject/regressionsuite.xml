@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="regression testing">
+    <test name="regression test">
+        <!--        run all packages-->
+        <packages>
+            <package name="com.myapp.*"></package>
+        </packages>
+    </test>
+</suite>

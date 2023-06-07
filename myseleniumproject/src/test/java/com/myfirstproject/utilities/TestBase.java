@@ -4,17 +4,21 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 public abstract class TestBase {
     protected static WebDriver driver;
     protected static ExtentReports extentReports;
@@ -55,13 +59,17 @@ public abstract class TestBase {
     public void setUp(){
         WebDriverManager.chromedriver().setup();
         driver= new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
     }
     @After
     public void tearDown() throws InterruptedException {
         Thread.sleep(5000);
         driver.quit();
+    }
+    //    OPENS A URL
+    public static void openURL(String url){
+        driver.get(url);
     }
     /*
     This method captures sscreenshot of the entire page
@@ -100,10 +108,10 @@ public abstract class TestBase {
         //        Create a date for giving dynamic name otherwise the screenshots overrides
         String now = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());//getting local date in this format
         //                     CURRENT PROJECT FOLDER         foldername   subfoldername imagename
-        String path = System.getProperty("user.dir")+"/test-output/Screenshots/"+now+"image.png";
+        String path = System.getProperty("user.dir")+"/test-output/Reports/Screenshots/"+now+"image.png";
         //        3. Save the image in the path as a file
         FileUtils.copyFile(image,new File(path));
-//        GETTING THE ABSOLUTE PATH OF THE IMAGE PATH THAT IS STRING
+        //        GETTING THE ABSOLUTE PATH OF THE IMAGE PATH THAT IS STRING
         return new File(path).getAbsolutePath();
     }
     /*
@@ -137,6 +145,21 @@ public abstract class TestBase {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();",element);
     }
+    //    EXPLICITLY WAIT FOR ELEMENT TO BE VISIBLE, SCROLL INTO THE ELEMENT, THEN CLICK BY JS
+    public static void clickWithTimeoutByJS(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", waitForVisibility(element,5));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    }
+    public static void clickWithTimeOut(WebElement element, int timeout) {
+        for (int i = 0; i < timeout; i++) {
+            try {
+                element.click();
+                return;
+            } catch (WebDriverException e) {
+                waitFor(1);
+            }
+        }
+    }
     /*
     @param String id of teh webelement that we want to locate
     locating element using javascript executor
@@ -155,4 +178,96 @@ public abstract class TestBase {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].setAttribute('value','"+text+"')",inputElement);
     }
-}
+    /*
+    param : Id of the the element
+     */
+    public static String getValueByJS(String idOfElement){
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+        String value=js.executeScript("return document.getElementById('"+idOfElement+"').value").toString();
+        System.out.println(value);
+        return value;
+//        How you get the value of an input box?
+//        We can js executor.
+//        How?
+//        I can get the element using js executor, and get teh value of the element.
+//        For example, I can get the element by id, and use value attribute to get the value of in an input
+//        I have to do this, cause getText in this case does not return teh text in an input
+//        EG: getValueByJS("hotelDates")
+    }
+    /*   HARD WAIT:
+      @param : second
+    */
+    public static void waitFor(int seconds){
+        try {
+            Thread.sleep(seconds*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    /*
+    SELENIUM WAIT REUSABLE METHODS
+     */
+    //    DYNAMIC SELENIUM WAITS:
+    //===============Explicit Wait==============//
+    public static WebElement waitForVisibility(WebElement element, int timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+        return wait.until(ExpectedConditions.visibilityOf(element));
+    }
+    public static WebElement waitForVisibility(By locator, int timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+    public static WebElement waitForClickablility(WebElement element, int timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+        return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+    public static WebElement waitForClickablility(By locator, int timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+        return wait.until(ExpectedConditions.elementToBeClickable(locator));
+    }
+    public static String getTextWithTimeout(WebElement element, int timeout) {
+        String text="";
+        for (int i = 0; i < timeout; i++) {
+            try {
+                text = element.getText();
+                return text;
+            } catch (WebDriverException e) {
+                waitFor(1);
+            }
+        }
+        return null;
+    }
+    /*
+    Custom method to wait to type in an input
+     */
+    public static void sendKeysWithTimeout(WebElement element,String text,int timeout) {
+        for (int i = 0; i < timeout; i++) {
+            try {
+                element.sendKeys(text);
+                return;
+            } catch (WebDriverException e) {
+                waitFor(1);
+            }
+        }
+    }
+    //    This can be used when a new page opens
+    public static void waitForPageToLoad(long timeout) {
+        ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+            }
+        };
+        try {
+            System.out.println("Waiting for page to load...");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+            wait.until(expectation);
+        } catch (Throwable error) {
+            System.out.println(
+                    "Timeout waiting for Page Load Request to complete after " + timeout + " seconds");
+        }
+    }
+    //======Fluent Wait====
+    // params : xpath of teh element , max timeout in seconds, polling in second
+    public static WebElement fluentWait(String xpath, int withTimeout, int pollingEvery) {
+        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(withTimeout)...

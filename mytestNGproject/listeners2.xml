@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <!--    listeners tag is used to link the listeners util class-->
+    <listeners>
+        <listener class-name="com.myapp.utilities.ListenersUtil"></listener>
+    </listeners>
+    <!--    BELOW IS TEST CLASSES
+            ABOVE IS UTIL CLASS
+            WE LINKED THEM USING THIS XML FILE-->
+    <test verbose="2" preserve-order="true"
+          name="/Users/techproed/IdeaProjects/mytestNGproject/src/test/java/com/myapp/tests/listeners/ListenersTest2.java">
+        <classes>
+            <class name="com.myapp.tests.listeners.ListenersTest2">
+                <methods>
+                    <include name="test1"/>
+                    <include name="test2"/>
+                    <include name="test3"/>
+                    <include name="test4"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

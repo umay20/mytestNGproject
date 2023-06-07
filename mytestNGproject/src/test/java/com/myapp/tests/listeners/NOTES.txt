@@ -1,0 +1,11 @@
+*****LISTENERS*****
+*What is Listeners?
+-It is used to listen the test cases to understand the status such as PASS, FAIL, SKIP, EXCEPTION, RUN,...
+*How do/did you use Listeners?
+-I used listeners in my testNG project.
+-I used it for auto-capturing the screenshots for failed test cases(ITestListener interface onTestFailure method)
+-I also used it for auto-rerunning failed test cases(IRetryAnalyzer interface)
+-We can do many more such as generating extra reports or controlling the flow of test cases.
+-I actually have a ListenerUtils in my framework to use listeners easily and automatically
+-We can LINK listeners and tset classes using Listener annotation or xml files
+-I personally use xml files cause that are more generic.

@@ -1,0 +1,18 @@
+*****TESTNG XML FILES*****
+*What is it?
+    -They are used to create test execution suites in testng.
+    -For example, we can run smoke test groups or regression test groups using testng xml files
+*How did you use it?
+    -I used it in my test ng framework to create a smoke test suite
+    -In that smoke test suite, I have around 18 test cases to run with smoketest xml file
+    -I also used it to do parallel testing
+*How do you do parallel testing in TestNG?
+    -I do parallel testing using testng xml files
+    -In my parallel test file, I have parallel and thread count keywords to execute tests in parallel
+    -parallel = able to run tests in multiple browsers at the same time
+    -thread-count = number of thread( or browser ) to run at the same time
+    -Example : <suite name="my login suite" verbose="1" parallel="methods" thread-count="5">
+    -Note: we can do parallel testing with the help of data provider in testNG using parallel keyword
+*How do you create test ng xml?
+    -We can manually create xml file
+    -We can also use testng xml plugin to create xml file for specific classes, packages, or methods,...

@@ -1,0 +1,17 @@
+What is Reusable Methods in Automation?
+Reusable methods are in our utilities package or in our test base class
+We can have multiple reusable classes such as LoggerUtils, ExcelUtils, JSUtils, ScreenUtils, MediaUtils, WaitUtils,…
+Why we need to use Reusable Methods in Automation?
+1. Faster development
+2. Stable Framework. If we keep writing more, we likely make mistake, so we create stable working reusable methods to minimize coding errors.
+3. Get rid of redundancy.
+4. Minimize exceptions. For example, we can find elements using explicit waits to handle wait issues, or we can use JS clicks methods to handle click issues using Reusable methods.
+
+
+Test Case:
+When user goes to https://www.automationexercise.com/
+And click on Sing up link
+And enter credentials and click sign up button
+And enter the information
+And click on Create Account
+Then verify the account creating is successful. Account Created! Element is displayed

@@ -16,6 +16,7 @@ public class Day14_TimeOutException extends TestBase {
          */
 //        USE EXPLICIT WAIT
 //        waitForVisibility(driver.findElement(By.name("twotabsearchtextbox")),15);//NoSuchElementException
+
         waitForVisibility(By.name("twotabsearchtextbox"),25);//TimeoutException.(name should be id)
         waitForVisibility(By.id("wrong-fake-id"),25);//TimeoutException.(id value should be twotabsearchtextbox)
         // cause after explicit wait time, element is not still found

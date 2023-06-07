@@ -28,7 +28,6 @@ public class Day14_StaleElementReferenceException extends TestBase {
         driver.get("https://testcenter.techproeducation.com/");
         WebElement checkboxesLink = driver.findElement(By.linkText("Checkboxes"));
         checkboxesLink.click();
-        waitFor(5);
         driver.navigate().back();
         waitFor(5);
         checkboxesLink.click();

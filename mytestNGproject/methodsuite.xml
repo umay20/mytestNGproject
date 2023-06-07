@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="my login suite" verbose="1" >
+    <test name="Regression1" preserve-order="false">
+        <classes>
+            <!--            CLASS 1 : RUN ONLY test1 AND test2 FROM Day17_Annotations-->
+            <class name="com.myapp.tests.topics.Day17_Annotations">
+                <methods>
+                    <!--USE include For teh methods that you want to run : METHOD 1-->
+                    <include name="test1" />
+                    <!--                METHOD 2-->
+                    <include name="test6" />
+                </methods>
+            </class>
+            <!--            CLASS 2: RUN EVERY OTHER METHOD EXCEPT productTest FROM Day22_DataProvider2-->
+            <class name="com.myapp.tests.dataprovider.Day22_DataProvider2">
+                <methods>
+                    <!--                    USE exclude for the METHOD THAT I DON'T WANT TO EXECUTE FROM THIS CLASS-->
+                    <exclude name="productTest"></exclude>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

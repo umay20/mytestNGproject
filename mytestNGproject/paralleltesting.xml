@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="my login suite in parallel" parallel="classes" thread-count="3" verbose="1" >
+
+    <!-- TEST 1 -->
+    <test name="test suite 1" >
+        <classes>
+            <class name="com.myapp.tests.paralleltesting.Day23_ManagerLogin" />
+            <class name="com.myapp.tests.paralleltesting.Day23_WebTables" />
+            <class name="com.myapp.tests.paralleltesting.Day23_SearchItem" />
+        </classes>
+    </test>
+
+</suite>
